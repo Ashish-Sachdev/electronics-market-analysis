@@ -1,0 +1,16 @@
+# 10-Day Roadmap
+
+| Day | Deliverable |
+|---|---|
+| 1 | Scope, business questions, categories and GitHub issues finalized |
+| 2 | Olist tables inspected and join design documented |
+| 3 | Ingestion and transformation v1 |
+| 4 | Processed dataset, quality checks and DuckDB tables |
+| 5 | EDA, KPI validation and ML feature design |
+| 6 | Power BI v1 and baseline/Logistic Regression |
+| 7 | Random Forest and dashboard completion |
+| 8 | Integration and documentation |
+| 9 | Testing, manual source validation and corrections only |
+| 10 | Final README, insights and presentation rehearsal |
+
+No major new features should be started on days 9 or 10.
