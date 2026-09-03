@@ -1,0 +1,124 @@
+{
+  "duckdb": {
+    "path": "data/processed/electronics_market.duckdb",
+    "table_counts": {
+      "price_observations": 22139,
+      "product_categories": 11659,
+      "products": 832
+    },
+    "views": [
+      "latest_product_prices",
+      "monthly_price_summary"
+    ]
+  },
+  "outputs": {
+    "interim_cleaned": "data/interim/electronics_price_offers_cleaned.csv",
+    "interim_rejected": "data/interim/electronics_price_offers_rejected.csv",
+    "preview": "reports/processed_preview.csv",
+    "price_observations": "data/processed/price_observations.csv",
+    "product_categories": "data/processed/product_categories.csv",
+    "products": "data/processed/products.csv"
+  },
+  "pipeline_mode": "electronics_pricing",
+  "profile": {
+    "availability": {
+      "in_stock": 21078,
+      "limited_or_special_order": 815,
+      "out_of_stock": 202,
+      "unknown": 44
+    },
+    "conditions": {
+      "new": 21679,
+      "other": 1,
+      "refurbished": 236,
+      "used": 223
+    },
+    "currencies": {
+      "CAD": 1,
+      "USD": 22138
+    },
+    "date_seen_max": "2018-07-25T23:00:00+00:00",
+    "date_seen_min": "2014-08-30T16:00:00+00:00",
+    "sale_observations": 4023,
+    "sale_rate_percent": 18.17,
+    "unique_merchants": 668,
+    "usd_price_midpoint": {
+      "maximum": 6498.99,
+      "mean": 471.22,
+      "median": 199.95,
+      "minimum": 1.0
+    }
+  },
+  "quality": {
+    "failures": [],
+    "passed": true,
+    "processed_missing_values": {
+      "is_available": {
+        "count": 859,
+        "percent": 3.88
+      },
+      "shipping_cost": {
+        "count": 22021,
+        "percent": 99.47
+      },
+      "shipping_is_free": {
+        "count": 14031,
+        "percent": 63.38
+      },
+      "shipping_text": {
+        "count": 10969,
+        "percent": 49.55
+      }
+    },
+    "raw_missing_values": {
+      "Unnamed: 26": {
+        "count": 7210,
+        "percent": 99.46
+      },
+      "Unnamed: 27": {
+        "count": 7231,
+        "percent": 99.75
+      },
+      "Unnamed: 28": {
+        "count": 7243,
+        "percent": 99.92
+      },
+      "Unnamed: 29": {
+        "count": 7237,
+        "percent": 99.83
+      },
+      "Unnamed: 30": {
+        "count": 7243,
+        "percent": 99.92
+      },
+      "ean": {
+        "count": 5706,
+        "percent": 78.71
+      },
+      "manufacturer": {
+        "count": 4014,
+        "percent": 55.37
+      },
+      "prices.shipping": {
+        "count": 2972,
+        "percent": 41.0
+      }
+    }
+  },
+  "source": {
+    "columns": 31,
+    "path": "data/raw/ElectronicsProductsPricingData.csv",
+    "rows": 7249,
+    "sha256": "2a62b99834ae92f4c3b3f0d5870d02220ddcbd7b3c2e1dba1cfbe6fa064a4302"
+  },
+  "transform": {
+    "duplicate_observations_removed": 28,
+    "observation_rows_before_deduplication": 22167,
+    "processed_observations": 22139,
+    "product_categories": 11659,
+    "products": 832,
+    "raw_rows": 7249,
+    "rejected_rows": 45,
+    "valid_offer_rows": 7204
+  }
+}

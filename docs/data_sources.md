@@ -1,12 +1,20 @@
-# Data Sources
+# Data Source
 
-## MVP source
-Brazilian E-Commerce Public Dataset by Olist.
+## Current source
 
-Use the transaction, order-item, product, review, customer and related tables required by the analysis. Keep downloaded source files unchanged in `data/raw/` locally.
+`data/raw/ElectronicsProductsPricingData.csv` is a historical electronics product-pricing export.
+It contains product metadata and repeated merchant price observations dated from 2014 through 2018.
 
-## Important limitation
-Olist is historical Brazilian marketplace data. Findings must not be presented as estimates of the entire current electronics market.
+The quality report records the exact SHA-256 hash used for a run so results can be tied to the
+source version.
 
-## Future sources
-Additional review datasets may be considered for separate NLP experiments, but unrelated datasets should not be directly joined to Olist without valid shared entities and compatible definitions.
+## Limitations
+
+- The file is not the Brazilian Olist order dataset assumed by the original starter plan.
+- It has no orders, quantities, customers, review scores, costs, profit or delivery information.
+- A price observation is evidence that a price was seen, not evidence that a product sold.
+- Merchant and category coverage is not guaranteed to represent the entire electronics market.
+- USD and CAD observations must not be aggregated together without currency conversion.
+
+Do not describe price totals as revenue or GMV, and do not infer sales volume from observation
+counts.

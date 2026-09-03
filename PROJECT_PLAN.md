@@ -1,56 +1,49 @@
-# Electronics Market Analysis — 10-Day Project Plan
+# Electronics Pricing Analysis — Project Plan
 
-## Team and objective
-Team size: 8. Duration: 10 days. Build an end-to-end analytics project for electronics-related Olist marketplace orders, combining data engineering, SQL, exploratory analysis, Power BI and machine learning.
+## Objective
+
+Build a reproducible analytics pipeline for the uploaded historical electronics pricing file.
+Compare merchant coverage, observed price levels, availability, sale activity, brands and product
+categories while keeping currencies separate.
 
 ## Business questions
-1. Which electronics categories generate the most GMV and units sold?
-2. How do sales and customer ratings change over time and across categories?
-3. Which categories have the highest low-review and late-delivery rates?
-4. What operational and order characteristics are associated with poor reviews?
-5. Can historical order information estimate low-review risk?
 
-## MVP KPIs
-- GMV = sum(item price)
-- Units Sold = count of valid order items
-- Average Item Price = mean(item price)
-- Average Review Score = mean(review score)
-- Late Delivery Rate = late delivered orders / delivered orders
-- Low Review Rate = reviews <= 3 / reviewed orders
+1. Which merchants and brands have the broadest product coverage?
+2. How do observed prices and sale rates change over time?
+3. Which products show the widest merchant price differences?
+4. How do availability and item condition differ across merchants?
+5. Which categories and brands are represented in the dataset?
 
-## Machine learning
-Target: `low_review = 1` when review score <= 3, otherwise 0. Start with a simple baseline, then Logistic Regression, then Random Forest. Use a time-aware train/test split where practical. Report precision, recall, F1, ROC-AUC and confusion matrix. Avoid leakage: features unavailable at prediction time must not be used.
+## Core metrics
 
-## Dashboard
-Page 1 — Sales & Market Overview: KPI cards, monthly GMV, category GMV, units by category, category/state/date filters.
+- Price observations = count of unique product/merchant/price/date combinations.
+- Products observed = distinct product IDs.
+- Merchant coverage = distinct products per merchant.
+- Median observed price = median price midpoint, grouped by currency.
+- Sale-observation rate = sale-flagged observations / eligible observations.
+- In-stock rate = explicitly in-stock observations / observations with known stock status.
 
-Page 2 — Customer Experience & Prediction: low-review rate, late-delivery rate, review distribution, low reviews by category, delivery performance vs rating, and summarized ML performance/risk output.
+## Pipeline
 
-## Team division
-| Person | Primary responsibility | Main days |
-|---|---|---|
-| P1 | Project lead, definitions, integration | 1–2, 8–10 |
-| P2 | Ingestion | 2–4 |
-| P3 | Transformation | 2–5 |
-| P4 | DuckDB and SQL | 4–6 |
-| P5 | EDA and business insights | 4–6 |
-| P6 | Power BI Page 1 | 5–8 |
-| P7 | Power BI Page 2 | 5–9 |
-| P8 | Machine learning and testing | 4–9 |
-
-## Roadmap
-| Day | Deliverable |
-|---|---|
-| 1 | Scope, definitions, categories, issues and ownership |
-| 2 | Dataset inspection and join design |
-| 3 | Ingestion and transformation V1 |
-| 4 | Processed table, quality checks and DuckDB |
-| 5 | EDA, KPI validation and ML feature design |
-| 6 | Power BI V1 and Logistic Regression |
-| 7 | Random Forest and dashboard completion |
-| 8 | Integration and documentation |
-| 9 | Testing, source validation and corrections only |
-| 10 | README, final insights and presentation rehearsal |
+1. Preserve the source file in `data/raw/`.
+2. Read the file without changing values.
+3. Standardize headers, text, brands, merchants, condition, availability, currency, dates and units.
+4. Quarantine structurally shifted rows with reasons.
+5. Split repeated date/category lists into normalized tables.
+6. Deduplicate price observations using the documented business key.
+7. Stop on failed data-quality checks.
+8. Export processed CSVs and build DuckDB tables/views.
+9. Reconcile SQL results against the quality report before dashboard work.
 
 ## Definition of done
-The pipeline reruns from documented inputs; processed data follows the data dictionary; quality checks and tests pass; important values are manually compared with source data; dashboard filters/calculations work; missing values are not displayed as zero; ML is compared with a baseline; limitations are visible; setup instructions work; every teammate can explain their contribution; and no credentials/private or unnecessary generated files are committed.
+
+The one-command pipeline reruns from the untouched source; rejected records remain auditable;
+processed tables have documented grains and keys; tests and lint pass; DuckDB row counts equal CSV
+row counts; currency is included in price aggregations; missing values are never replaced with zero;
+and limitations are visible in the README and dashboard.
+
+## Current limitation
+
+The uploaded file has no transactions, quantities, customers, review scores or delivery fields.
+Therefore, it cannot support GMV, units sold, review-risk modelling or delivery KPIs. Those analyses
+need a compatible order-level dataset such as Olist and belong in a separate pipeline adapter.

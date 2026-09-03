@@ -1,4 +1,4 @@
-.PHONY: install test lint pipeline model
+.PHONY: install test lint pipeline database model
 
 install:
 	python -m pip install -e ".[dev]"
@@ -11,6 +11,9 @@ lint:
 
 pipeline:
 	python scripts/run_pipeline.py
+
+database:
+	python scripts/query_duckdb.py
 
 model:
 	python scripts/train_model.py

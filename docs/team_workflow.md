@@ -6,12 +6,14 @@
 3. Data transformation
 4. SQL and DuckDB
 5. EDA and business insights
-6. Power BI sales page
-7. Power BI customer-experience page
-8. Machine learning and testing
+6. Power BI price/coverage page
+7. Power BI availability/sale page
+8. Testing and documentation
 
 ## Git workflow
-Create a GitHub issue before substantial work. Use branches such as `feature/ingestion`, `feature/transform`, `analysis/eda`, `dashboard/sales`, `model/low-review`, `test/data-quality`, or `docs/methodology`.
+Create a GitHub issue before substantial work. Use branches such as `feature/ingestion`,
+`feature/transform`, `analysis/eda`, `dashboard/pricing`, `test/data-quality`, or
+`docs/methodology`.
 
 One teammate owns each shared file at a time. Open a pull request, ask a paired teammate to review it, and merge only after checks pass.
 
