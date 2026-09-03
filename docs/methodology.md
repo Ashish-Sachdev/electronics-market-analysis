@@ -1,14 +1,19 @@
 # Methodology
 
-1. Preserve downloaded Olist files in `data/raw/`.
-2. Ingest required CSV tables with explicit date parsing.
-3. Standardize product categories and join tables using documented keys.
-4. Create analytical fields such as late-delivery and low-review indicators.
-5. Run data-quality checks before writing processed outputs.
-6. Load processed data into DuckDB.
-7. Reconcile KPI calculations in Python/SQL.
-8. Perform EDA and time/category comparisons.
-9. Train a time-aware classification model for low-review risk.
-10. Build two Power BI pages and manually validate important values.
+1. Preserve the source file unchanged in `data/raw/`.
+2. Ingest the supported tabular format into Pandas.
+3. Standardize headers to snake_case, trim text and normalize explicit missing tokens.
+4. Detect CSV-shifted rows using the unexpected trailing columns and primary-category mismatch.
+5. Keep valid offers in interim and quarantine rejected rows with their reasons.
+6. Normalize condition, availability, merchant aliases, brand case, currency, timestamps, weight and
+   explicit shipping information.
+7. Split comma-separated observation dates into individual rows.
+8. Remove duplicate observations using product, merchant, price range, currency, sale flag and
+   timestamp as the business key.
+9. Split products and categories into separate normalized tables.
+10. Validate required fields, unique observation IDs, valid currencies, non-negative price ranges
+    and `price_min <= price_max`.
+11. Write processed CSVs, build DuckDB tables/views and reconcile database row counts.
 
-Missing, unavailable and suppressed values must never automatically become zero.
+Rows are not silently deleted because of schema corruption. They are written to the rejected
+interim file, where the original values, source row number and rejection reason remain inspectable.

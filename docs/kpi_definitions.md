@@ -1,12 +1,13 @@
 # KPI Definitions
 
-| KPI | Formula | Direction | Caveat |
-|---|---|---|---|
-| GMV | SUM(price) | Context dependent | Sales value, not profit |
-| Units Sold | COUNT(valid order items) | Higher | Define cancelled-order treatment |
-| Average Item Price | AVG(price) | Context dependent | Product mix affects it |
-| Average Review Score | AVG(review_score) | Higher | Only reviewed orders |
-| Late Delivery Rate | late delivered orders / eligible delivered orders | Lower | Missing delivery dates excluded |
-| Low Review Rate | reviews <= 3 / reviewed orders | Lower | Missing reviews are not zero |
+| KPI | Formula | Caveat |
+|---|---|---|
+| Price observations | `COUNT(*)` from `price_observations` | Measures data coverage, not sales |
+| Products observed | `COUNT(DISTINCT product_id)` | Only products present in this file |
+| Merchant product coverage | Distinct products per merchant | Observation frequency differs by merchant |
+| Median observed price | `MEDIAN(price_midpoint)` grouped by currency | Product mix affects comparisons |
+| Sale-observation rate | Sale observations / all eligible observations | A sale flag is not a completed sale |
+| Known in-stock rate | In-stock / (`in_stock` + `out_of_stock`) | Unknown/special-order values excluded |
+| Product merchant spread | Highest latest merchant price - lowest latest merchant price | Compare only within one currency |
 
-Each dashboard calculation must be reconciled against SQL or Python before presentation.
+Never sum prices as revenue or GMV. Every price aggregation must group or filter by `currency`.
