@@ -1,16 +1,13 @@
-.PHONY: install test lint pipeline model
+.PHONY: install notebook lint model
 
 install:
-	python -m pip install -e ".[dev]"
+	python -m pip install -e ".[dev,notebook]"
 
-test:
-	pytest
+notebook:
+	jupyter lab
 
 lint:
-	ruff check .
-
-pipeline:
-	python scripts/run_pipeline.py
+	ruff check scripts
 
 model:
-	python scripts/train_model.py
+	python scripts/train_price_model.py
