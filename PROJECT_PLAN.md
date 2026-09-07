@@ -1,56 +1,72 @@
-# Electronics Market Analysis — 10-Day Project Plan
+# Electronics Pricing Analysis — Current Project Plan
 
-## Team and objective
-Team size: 8. Duration: 10 days. Build an end-to-end analytics project for electronics-related Olist marketplace orders, combining data engineering, SQL, exploratory analysis, Power BI and machine learning.
+## Objective
+Analyze historical electronics listing prices and explain how price differs across brand, merchant, product category, condition, discount status, shipping type and time. The team's cleaned dataset and `notebooks/electronics_pricing_analysis.ipynb` are the centre of the project.
+
+## Current workflow
+
+```text
+Original dataset
+  -> team cleaning completed manually
+  -> electronics_pricing_clean.csv
+  -> Jupyter/Colab analysis notebook
+  -> charts + business findings
+  -> reports + Power BI
+  -> optional predictive price model
+```
+
+There is **no DuckDB step and no automated cleaning pipeline in the current workflow**.
 
 ## Business questions
-1. Which electronics categories generate the most GMV and units sold?
-2. How do sales and customer ratings change over time and across categories?
-3. Which categories have the highest low-review and late-delivery rates?
-4. What operational and order characteristics are associated with poor reviews?
-5. Can historical order information estimate low-review risk?
+1. Does actual brand pricing match the intended market position?
+2. Which brands and merchants depend most on discounts?
+3. Where are the strongest channel-coverage opportunities and risks?
+4. Which categories offer less noisy competitive space?
+5. What value do used and refurbished products offer relative to new products?
 
-## MVP KPIs
-- GMV = sum(item price)
-- Units Sold = count of valid order items
-- Average Item Price = mean(item price)
-- Average Review Score = mean(review score)
-- Late Delivery Rate = late delivered orders / delivered orders
-- Low Review Rate = reviews <= 3 / reviewed orders
+## Main analytical fields
+- `price` — cleaned observed listing price
+- `brand_clean` — standardized brand
+- `merchant_clean` — standardized merchant/channel
+- `category_clean` — standardized category
+- `condition_clean` — standardized product condition
+- `availability_clean` — standardized availability
+- `shipping_type` — grouped shipping type
+- `sale_flag` — whether the source identifies the listing as a sale
+- `date_seen` — parsed observation date
 
-## Machine learning
-Target: `low_review = 1` when review score <= 3, otherwise 0. Start with a simple baseline, then Logistic Regression, then Random Forest. Use a time-aware train/test split where practical. Report precision, recall, F1, ROC-AUC and confusion matrix. Avoid leakage: features unavailable at prediction time must not be used.
+## Important interpretation rule
+A row is a **listing/price observation**, not proof that one unit was sold. Therefore this project should discuss observed prices, discount/sale presence and merchant/category coverage. It should not call row counts `units sold`, should not calculate GMV/revenue from row counts, and should not invent ratings or delivery KPIs that are not in this dataset.
 
-## Dashboard
-Page 1 — Sales & Market Overview: KPI cards, monthly GMV, category GMV, units by category, category/state/date filters.
+## Deliverables
+- Completed pricing-analysis notebook
+- Data dictionary and methodology
+- Written analysis summary in `reports/`
+- Exported figures in `reports/figures/` when needed
+- Power BI dashboard aligned with the notebook
+- Optional price-prediction model with documented assumptions and evaluation
 
-Page 2 — Customer Experience & Prediction: low-review rate, late-delivery rate, review distribution, low reviews by category, delivery performance vs rating, and summarized ML performance/risk output.
+## Optional machine learning
+The recommended target is `price`, so this is a **regression** problem. Compare:
+1. Median-price baseline
+2. Linear Regression
+3. Random Forest Regressor
 
-## Team division
-| Person | Primary responsibility | Main days |
-|---|---|---|
-| P1 | Project lead, definitions, integration | 1–2, 8–10 |
-| P2 | Ingestion | 2–4 |
-| P3 | Transformation | 2–5 |
-| P4 | DuckDB and SQL | 4–6 |
-| P5 | EDA and business insights | 4–6 |
-| P6 | Power BI Page 1 | 5–8 |
-| P7 | Power BI Page 2 | 5–9 |
-| P8 | Machine learning and testing | 4–9 |
+Use MAE, RMSE and R². Prefer a chronological split using `date_seen` so earlier observations train the model and later observations test it.
 
-## Roadmap
-| Day | Deliverable |
+Avoid leakage: if `price` was created from `prices.amountMin` and `prices.amountMax`, do not use those source-price columns to predict `price`. Do not use product `id` or full product `name` as ordinary features because repeated products can make the test artificially easy.
+
+## Team roles
+| Role | Responsibility |
 |---|---|
-| 1 | Scope, definitions, categories, issues and ownership |
-| 2 | Dataset inspection and join design |
-| 3 | Ingestion and transformation V1 |
-| 4 | Processed table, quality checks and DuckDB |
-| 5 | EDA, KPI validation and ML feature design |
-| 6 | Power BI V1 and Logistic Regression |
-| 7 | Random Forest and dashboard completion |
-| 8 | Integration and documentation |
-| 9 | Testing, source validation and corrections only |
-| 10 | README, final insights and presentation rehearsal |
+| Data cleaning | Own and document the final cleaned CSV |
+| Data understanding | Verify columns, missingness, duplicate meaning and observation grain |
+| Pricing EDA | Brand/category/condition price comparisons |
+| Discount analysis | Sale dependence by brand and merchant |
+| Channel analysis | Merchant/category coverage and shipping analysis |
+| Visualization/Power BI | Build dashboard from agreed metrics |
+| Predictive modelling | Build and evaluate optional price model |
+| QA/documentation | Recheck notebook claims and keep README/reports consistent |
 
 ## Definition of done
-The pipeline reruns from documented inputs; processed data follows the data dictionary; quality checks and tests pass; important values are manually compared with source data; dashboard filters/calculations work; missing values are not displayed as zero; ML is compared with a baseline; limitations are visible; setup instructions work; every teammate can explain their contribution; and no credentials/private or unnecessary generated files are committed.
+The notebook runs with the documented cleaned dataset; every chart has a clear business question; reports match the notebook; no sales/revenue claims are made from listing observations; dashboard calculations can be reproduced in Pandas; model evaluation includes a simple baseline and leakage discussion; and every teammate can explain the part they contributed.
